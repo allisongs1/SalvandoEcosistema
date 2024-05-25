@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fin del Juego</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+   #imagenFinal {
+    width: 100vw;
+    height: 100vh;
+   
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  #contenedorBoton {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #siguienteJuego {
+    font-size: 1.5em;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+  }
+
+  #siguienteJuego:hover {
+    background-color: #45a049;
+  }
+</style>
+</head>
+<body>
+<img id="imagenFinal" src="images/ESCENARIO2.jpg" alt="Fin del Juego">
+
+<div id="contenedorBoton">
+  <button id="siguienteJuego" onclick="irAlSiguienteJuego()">Jugar siguiente nivel</button>
+</div>
+
+<script>
+  function irAlSiguienteJuego() {
+    window.location.href = 'juego3.html'; // Ruta a la siguiente página o juego
+  }
+</script>
+</body>
+</html>
+
+
+

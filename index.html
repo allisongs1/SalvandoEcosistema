@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salvando el oceano</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #87CEEB;
+            font-family: Arial, sans-serif;
+        }
+        #gameCanvas {
+            display: block;
+        }
+        #infoPanel {
+            display: flex;
+            justify-content: space-between;
+            width: 800px;
+            margin-bottom: 10px;
+        }
+        #infoPanel div {
+            font-size: 20px;
+        }
+        #timer {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="position: absolute; top: 10px;">Salvando el Océano</h1>
+    <div id="infoPanel">
+        <div>Tiempo: <span id="timer">Iniciar</span> segundos</div>
+        <div>Basura recolectada: <span id="recolectada">0</span></div>
+        <div>Basura restante: <span id="restante">10</span></div>
+    </div>
+    <canvas id="gameCanvas"></canvas>
+    <script src="main.js"></script>
+</body>
+</html>

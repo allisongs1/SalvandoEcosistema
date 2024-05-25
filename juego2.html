@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego de Clasificación de Basura</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #titulo {
+    text-align: center;
+    font-size: 2em;
+    margin: 10px 0;
+  }
+
+  #info {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #temporizador, #contadorBasuras {
+    font-size: 1.5em;
+  }
+
+  #inicio {
+    font-size: 1.5em;
+    margin-left: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  #parque {
+    position: relative;
+    width: 100vw;
+    height: 100vh; /* Ocupa el 100% de la altura de la pantalla */
+    background-image: url('images/ESCENARIO1.jpg'); /* Ruta de la imagen del parque */
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    padding-bottom: 10px;
+  }
+
+  .contenedor {
+    width: 15vw;
+    height: auto;
+  }
+
+  .contenedor img {
+    width: 45%;
+    height: auto;
+  }
+
+  .basura {
+    position: absolute;
+    width: 40px;
+    height: auto;
+    cursor: pointer;
+    z-index: 1000;
+  }
+
+  .mensaje {
+    font-size: 24px;
+    color: #333;
+    margin: 10px 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="titulo">Cazadores de residuos</div>
+
+<div id="info">
+  <div id="temporizador">Tiempo restante: 2:00</div>
+  <button id="inicio" onclick="iniciarJuego()">Iniciar Juego</button>
+  <div id="contadorBasuras">Recogidas: 0 | Faltantes: 12</div>
+</div>
+
+<div class="mensaje">Arrastra la basura al contenedor correcto</div>
+
+<div id="parque">
+  <div class="contenedor" id="contenedorPlastico"><img src="images/contenedor_plastico.png" alt="Plástico"></div>
+  <div class="contenedor" id="contenedorVidrio"><img src="images/contenedor_vidrio.png" alt="Vidrio"></div>
+  <div class="contenedor" id="contenedorOrganico"><img src="images/contenedor_organico.png" alt="Orgánico"></div>
+  <div class="contenedor" id="contenedorPapel"><img src="images/contenedor_papel.png" alt="Papel"></div>
+</div>
+
+<img id="basuraPlastico1" class="basura" src="images/botella_plastico.png" alt="Plástico" style="top: 50%; left: 10%;" draggable="true">
+<img id="basuraPlastico2" class="basura" src="images/disco_plastico.png" alt="Plástico" style="top: 50%; left: 20%;" draggable="true">
+<img id="basuraPlastico3" class="basura" src="images/bolsa_plastico.png" alt="Plástico" style="top: 50%; left: 30%;" draggable="true">
+
+<img id="basuraVidrio1" class="basura" src="images/copa_vidrio.png" alt="Vidrio" style="top: 50%; left: 40%;" draggable="true">
+<img id="basuraVidrio2" class="basura" src="images/vidrio1_vidrio.png" alt="Vidrio" style="top: 50%; left: 50%;" draggable="true">
+<img id="basuraVidrio3" class="basura" src="images/vidrio2_vidrio.png" alt="Vidrio" style="top: 50%; left: 60%;" draggable="true">
+
+<img id="basuraOrganico1" class="basura" src="images/manzana_organico.png" alt="Orgánico" style="top: 60%; left: 10%;" draggable="true">
+<img id="basuraOrganico2" class="basura" src="images/naranja_organico.png" alt="Orgánico" style="top: 60%; left: 20%;" draggable="true">
+<img id="basuraOrganico3" class="basura" src="images/pesacado_organico.png" alt="Orgánico" style="top: 60%; left: 30%;" draggable="true">
+
+<img id="basuraPapel1" class="basura" src="images/bolsa_papel.png" alt="Papel" style="top: 60%; left: 40%;" draggable="true">
+<img id="basuraPapel2" class="basura" src="images/rollo_papel.png" alt="Papel" style="top: 60%; left: 50%;" draggable="true">
+<img id="basuraPapel3" class="basura" src="images/hoja_papel.png" alt="Papel" style="top: 60%; left: 60%;" draggable="true">
+
+<script>
+  let tiempoRestante = 120; // 2 minutos en segundos
+  let recogidas = 0;
+  let faltantes = 12;
+  let intervalo;
+
+  const basuras = document.querySelectorAll('.basura');
+  const contenedores = document.querySelectorAll('.contenedor img');
+  const mensaje = document.querySelector('.mensaje');
+  const temporizador = document.getElementById('temporizador');
+  const contadorBasuras = document.getElementById('contadorBasuras');
+
+  basuras.forEach(basura => {
+    basura.addEventListener('dragstart', dragStart);
+  });
+
+  contenedores.forEach(contenedor => {
+    contenedor.addEventListener('dragover', dragOver);
+    contenedor.addEventListener('drop', drop);
+  });
+
+  function dragStart(e) {
+    e.dataTransfer.setData('text/plain', e.target.id);
+  }
+
+  function dragOver(e) {
+    e.preventDefault();
+  }
+
+  function drop(e) {
+    e.preventDefault();
+    const basuraId = e.dataTransfer.getData('text/plain');
+    const basura = document.getElementById(basuraId);
+    const tipoBasura = basura.alt.toLowerCase();
+    const tipoContenedor = e.target.alt.toLowerCase();
+
+    if (tipoBasura === tipoContenedor) {
+      mensaje.textContent = '¡Bien hecho! Basura colocada en el contenedor correcto';
+      mensaje.style.color = '#009933';
+      basura.remove();
+      actualizarContadores();
+    } else {
+      mensaje.textContent = 'Oops, intenta colocar la basura en el contenedor adecuado';
+      mensaje.style.color = '#ff0000';
+    }
+  }
+
+  function actualizarContadores() {
+    recogidas++;
+    faltantes--;
+    contadorBasuras.textContent = `Recogidas: ${recogidas} | Faltantes: ${faltantes}`;
+    if (faltantes === 0) {
+      clearInterval(intervalo);
+      window.location.href = 'final2.html';
+    }
+  }
+
+  function iniciarTemporizador() {
+    intervalo = setInterval(() => {
+      tiempoRestante--;
+      const minutos = Math.floor(tiempoRestante / 60);
+      const segundos = tiempoRestante % 60;
+      temporizador.textContent = `Tiempo restante: ${minutos}:${segundos < 10 ? '0' : ''}${segundos}`;
+      
+      if (tiempoRestante <= 0 || faltantes === 0) {
+        clearInterval(intervalo);
+        mensaje.textContent = faltantes === 0 ? '¡Felicidades! Has recogido toda la basura' : 'Se acabó el tiempo. Intenta de nuevo';
+        if (faltantes === 0) {
+          window.location.href = 'final2.html';
+        }
+      }
+    }, 1000);
+  }
+
+  function iniciarJuego() {
+    iniciarTemporizador();
+    document.getElementById('inicio').disabled = true;
+  }
+</script>
+
+</body>
+</html>
+

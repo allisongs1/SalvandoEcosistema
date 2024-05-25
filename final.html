@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recomendaciones</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height:100vh;
+            background-color: #f0f0f0;
+        }
+        .canvas-container {
+            position: relative;
+        }
+        #finalCanvas {
+            display: block;
+        }
+        .button-container {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+			
+	
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+			color: aliceblue;
+			background-color: midnightblue;
+        }
+    </style>
+</head>
+<body>
+    <div class="canvas-container">
+        <canvas id="finalCanvas"></canvas>
+        <div class="button-container">
+            <button onclick="location.href='juego2.html'">Jugar siguiente nivel</button>
+        </div>
+    </div>
+    <script src="final.js"></script>
+</body>
+</html>
